@@ -40,6 +40,26 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
+// REQUISITO 1
+/*
+Cria a lista de produtos tratando os dados da API do ML.
+Chama a fetchProducts.js que é responsável por pegar os dados da API.
+Aguarda carregar os dados, depois chama a propriedade results e para cada item (produto) da lista cria um objeto com o sku, title e image. Chama a section 'items' e adiciona como filho da createProductItemElement, já informando o objeto como parâmetro dela.
+Chama a função ao carregar a página.
+*/
+const productsList = async () => {
+  await fetchProducts('computador').then((data) => {
+    data.results.forEach((item) => {
+      const product = {
+        sku: item.id,
+        name: item.title,
+        image: item.thumbnail,
+      };
+      document.querySelector('.items').appendChild(createProductItemElement(product));
+    });
+  });
+};
+
 window.onload = () => {
-  fetchProducts();
+  productsList();
 };
