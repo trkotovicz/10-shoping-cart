@@ -40,6 +40,18 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
+// REQUISITO 7
+function loading() {
+  const loadParagraph = document.createElement('p');
+  document.querySelector('.items').appendChild(loadParagraph);
+  loadParagraph.innerText = 'carregando...';
+  loadParagraph.className = 'loading';
+}
+
+function loaded() {
+  document.querySelector('.loading').remove();
+}
+
 // REQUISITO 1
 /*
 Cria a lista de produtos tratando os dados da API do ML.
@@ -49,6 +61,7 @@ Chama a função ao carregar a página.
 */
 const productsList = async () => {
   await fetchProducts('computador').then((data) => {
+    loaded();
     data.results.forEach((item) => {
       const product = {
         sku: item.id,
@@ -60,6 +73,31 @@ const productsList = async () => {
   });
 };
 
+// REQUISITO 2
+const productById = async (productId) => {
+  const data = await fetchItem(productId);
+    const product = {
+      sku: data.id,
+      name: data.title,
+      salePrice: data.price,
+    };
+  return product;
+
+  // await fetchItem(productId).then((data) => {
+  //   const product = {
+  //     sku: data.id,
+  //     name: data.title,
+  //     salePrice: data.price,
+  //   };
+  // });
+  // return product;
+};
+
+const addToCart = () => {
+
+};
+
 window.onload = () => {
+  loading();
   productsList();
 };
