@@ -1,3 +1,6 @@
+
+const cartItems = document.querySelector('.cart__items');
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -28,6 +31,7 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
+// REQUISITO 3
 function cartItemClickListener(event) {
   // coloque seu código aqui
 }
@@ -74,30 +78,37 @@ const productsList = async () => {
 };
 
 // REQUISITO 2
-const productById = async (productId) => {
-  const data = await fetchItem(productId);
+const addToCart = (product) => {
+  // add o produto na lista do carrinho de compras
+  cartItems.appendChild(createCartItemElement(product));
+};
+
+// 
+const productById = async (event) => {
+  // sku pega o elemento pai (o produto inteiro) do botão clicado e chama a getSkuFromProductItem que pega o sku do produto
+  const sku = getSkuFromProductItem(event.target.parentElement);
+  const data = await fetchItem(sku);
     const product = {
       sku: data.id,
       name: data.title,
       salePrice: data.price,
     };
-  return product;
-
-  // await fetchItem(productId).then((data) => {
-  //   const product = {
-  //     sku: data.id,
-  //     name: data.title,
-  //     salePrice: data.price,
-  //   };
-  // });
-  // return product;
+  // add o objeto product na lista do carrinho
+  addToCart(product);
 };
 
-const addToCart = () => {
+// addEventListener em todos botões de add ao carrinho e chama a função productById
+function addProductButton() {
+  const addCartButton = document.querySelectorAll('.item__add');
+  for (let index = 0; index < addCartButton.length; index += 1) {
+    addCartButton[index].addEventListener('click', productById);
+  }
+}
 
-};
+// Aninha ajudou a fazer meu botão addEventListener funcionar e a pegar o sku do produto
 
-window.onload = () => {
+window.onload = async () => {
   loading();
-  productsList();
+  await productsList();
+  addProductButton();
 };
