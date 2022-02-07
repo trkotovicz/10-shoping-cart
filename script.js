@@ -1,4 +1,3 @@
-
 const cartItems = document.querySelector('.cart__items');
 
 function createProductImageElement(imageSource) {
