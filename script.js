@@ -32,7 +32,7 @@ function getSkuFromProductItem(item) {
 
 // REQUISITO 3
 function cartItemClickListener(event) {
-  // coloque seu código aqui
+  cartItems.removeChild(event.target);
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -84,7 +84,7 @@ const addToCart = (product) => {
 
 // 
 const productById = async (event) => {
-  // sku pega o elemento pai (o produto inteiro) do botão clicado e chama a getSkuFromProductItem que pega o sku do produto
+  // a variável sku pega o elemento pai (informações do produto) do botão clicado e chama a getSkuFromProductItem que pega o sku do produto
   const sku = getSkuFromProductItem(event.target.parentElement);
   const data = await fetchItem(sku);
     const product = {
@@ -103,7 +103,6 @@ function addProductButton() {
     addCartButton[index].addEventListener('click', productById);
   }
 }
-
 // Aninha ajudou a fazer meu botão addEventListener funcionar e a pegar o sku do produto
 
 window.onload = async () => {
