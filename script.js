@@ -43,6 +43,18 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
+// REQUISITO 4
+// salva os items no localstorage
+function localStorageList() {
+  saveCartItems(cartItems.innerHTML);
+}
+
+// busca os items do localstorage e add o evento de click pra remover do carrinho
+function loadLocalStorageList() {
+  const cartItemsList = document.querySelectorAll('.cart__item');
+  cartItemsList.forEach((element) => element.addEventListener('click', cartItemClickListener));
+}
+
 // REQUISITO 7
 function loading() {
   const loadParagraph = document.createElement('p');
@@ -94,6 +106,8 @@ const productById = async (event) => {
     };
   // add o objeto product na lista do carrinho
   addToCart(product);
+  // requitiso 4 (chama função pra salvar carrinho de compras)
+  localStorageList();
 };
 
 // addEventListener em todos botões de add ao carrinho e chama a função productById
@@ -109,4 +123,6 @@ window.onload = async () => {
   loading();
   await productsList();
   addProductButton();
+  cartItems.innerHTML = getSavedCartItems();
+  loadLocalStorageList();
 };
