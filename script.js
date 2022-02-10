@@ -1,4 +1,5 @@
 const cartItems = document.querySelector('.cart__items');
+const emptyButton = document.querySelector('.empty-cart');
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -45,15 +46,20 @@ function createCartItemElement({ sku, name, salePrice }) {
 
 // REQUISITO 4
 // salva os items no localstorage
-function localStorageList() {
-  saveCartItems(cartItems.innerHTML);
-}
+const localStorageList = () => saveCartItems(cartItems.innerHTML);
 
 // busca os items do localstorage e add o evento de click pra remover do carrinho
 function loadLocalStorageList() {
   const cartItemsList = document.querySelectorAll('.cart__item');
   cartItemsList.forEach((element) => element.addEventListener('click', cartItemClickListener));
 }
+
+// REQUISITO 6
+const emptyCart = () => {
+  const cartItemList = document.querySelectorAll('.cart__item');
+  cartItemList.forEach((element) => element.remove());
+};
+emptyButton.addEventListener('click', emptyCart);
 
 // REQUISITO 7
 function loading() {
@@ -63,9 +69,7 @@ function loading() {
   loadParagraph.className = 'loading';
 }
 
-function loaded() {
-  document.querySelector('.loading').remove();
-}
+const loaded = () => document.querySelector('.loading').remove();
 
 // REQUISITO 1
 /*
