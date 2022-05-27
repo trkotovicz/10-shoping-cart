@@ -1,5 +1,6 @@
 const cartItems = document.querySelector('.cart__items');
 const emptyButton = document.querySelector('.empty-cart');
+const cartItemList = document.querySelectorAll('.cart__item');
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -31,24 +32,43 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
+// REQUISITO 5
+// const sumPriceItems = () => {
+//   const totalPrice = document.querySelector('.total-price');
+//   let sum = 0;
+
+//   cartItemList.forEach((element) => {
+//     const productPrice = parseFloat(element.innerText.split('$'));
+//     sum += productPrice;
+//   });
+
+//   totalPrice.innerText = sum;
+// };
+
 // REQUISITO 3
 function cartItemClickListener(event) {
   cartItems.removeChild(event.target);
 }
 
-function createCartItemElement({ sku, name, salePrice }) {
+// function createCartImageElement(image) {
+//   const img = document.createElement('img');
+//   img.src = image;
+//   return img;
+// }
+
+function createCartItemElement({ sku, name, salePrice, image }) {
   const li = document.createElement('li');
+
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  // li.appendChild(createCartImageElement(image));
   li.addEventListener('click', cartItemClickListener);
   return li;
 }
 
 // REQUISITO 4
-// salva os items no localstorage
 const localStorageList = () => saveCartItems(cartItems.innerHTML);
 
-// busca os items do localstorage e add o evento de click pra remover do carrinho
 function loadLocalStorageList() {
   const cartItemsList = document.querySelectorAll('.cart__item');
   cartItemsList.forEach((element) => element.addEventListener('click', cartItemClickListener));
@@ -72,12 +92,6 @@ function loading() {
 const loaded = () => document.querySelector('.loading').remove();
 
 // REQUISITO 1
-/*
-Cria a lista de produtos tratando os dados da API do ML.
-Chama a fetchProducts.js que é responsável por pegar os dados da API.
-Aguarda carregar os dados, depois chama a propriedade results e para cada item (produto) da lista cria um objeto com o sku, title e image. Chama a section 'items' e adiciona como filho da createProductItemElement, já informando o objeto como parâmetro dela.
-Chama a função ao carregar a página.
-*/
 const productsList = async () => {
   await fetchProducts('computador').then((data) => {
     loaded();
@@ -94,13 +108,11 @@ const productsList = async () => {
 
 // REQUISITO 2
 const addToCart = (product) => {
-  // add o produto na lista do carrinho de compras
   cartItems.appendChild(createCartItemElement(product));
 };
 
-// 
+
 const productById = async (event) => {
-  // a variável sku pega o elemento pai (informações do produto) do botão clicado e chama a getSkuFromProductItem que pega o sku do produto
   const sku = getSkuFromProductItem(event.target.parentElement);
   const data = await fetchItem(sku);
     const product = {
@@ -108,20 +120,16 @@ const productById = async (event) => {
       name: data.title,
       salePrice: data.price,
     };
-  // add o objeto product na lista do carrinho
   addToCart(product);
-  // requitiso 4 (chama função pra salvar carrinho de compras)
   localStorageList();
 };
 
-// addEventListener em todos botões de add ao carrinho e chama a função productById
 function addProductButton() {
   const addCartButton = document.querySelectorAll('.item__add');
   for (let index = 0; index < addCartButton.length; index += 1) {
     addCartButton[index].addEventListener('click', productById);
   }
 }
-// Aninha ajudou a fazer meu botão addEventListener funcionar e a pegar o sku do produto
 
 window.onload = async () => {
   loading();
